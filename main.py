@@ -1,4 +1,5 @@
 import time
+from random import random
 
 import numpy
 from PIL import Image
@@ -9,7 +10,7 @@ from numpy import asarray
 img = Image.open('corgi.jpg')
 numpydata = asarray(img)
 
-cm=1#масштабирование относительно разрешения 128
+cm=1/1#масштабирование относительно разрешения 128
 razr=4/3#формат
 ci=int(128*cm)
 cj=int(ci*razr)
@@ -63,27 +64,17 @@ def cc(a,n):
 f=open("Dogs.txt")
 s=f.readlines()
 for i in range(ci):
+    #s[i]=s[i][::-1].replace(str(int(random()*124)),str(int(random()*124)))#инверсия и добавление битых пикселей
     b[i]=list(map(int,s[i].split()))
 # Convert the pixels into an array using numpy
+f.close()
 array = numpy.array(a, dtype=numpy.uint8)
-
-# Use PIL to create an image from the new array of pixels
 new_image = Image.fromarray(array)
 new_image.save('new.png')
 for i in range(ci):
     for j in range(cj):
         for k in range(3):
             a[i][j][k]=int(cc(b[i][j],numofcolors+1)[k])*ck
-
 array1 = numpy.array(a, dtype=numpy.uint8)
-
-# Use PIL to create an image from the new array of pixels
 new_image1 = Image.fromarray(array1)
 new_image1.save('new1.png')
-# data
-'''print(len(numpydata),len(numpydata[0]))
-time.sleep(10000)
-for i in range(len(numpydata)):
-    for j in range(len(numpydata[i])):
-        print(hex(numpydata[i][j][0])[2:]+hex(numpydata[i][j][1])[2:]+hex(numpydata[i][j][2])[2:],end="||")
-    print("")'''
