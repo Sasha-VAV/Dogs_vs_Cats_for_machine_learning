@@ -7,13 +7,28 @@ from numpy import asarray
 
 # load the image and convert into
 # numpy array
-f = open("Dogs.txt", 'w')
-numofex=2
-for kk in range(2):
-    for ii in range(0,numofex):
-        sv=str(kk)+str(ii)+".jpg"
-        img = Image.open(sv)
-        numpydata = asarray(img)
+f = open("Dogs.txt", 'a')
+numofex=12500
+start_time=time.time()
+for iii in range(11702,numofex):
+    for kk in range(2):
+        """if iii/numofex==0.0112:
+            print("")"""
+        if iii%10==0:
+            print(iii,iii/numofex,time.time()-start_time)
+        if kk==0:
+            sv="Dog"
+        else:
+            sv="Cat"
+        sv=sv+"/"+str(iii)+".jpg"
+        '''sv=sv.replace(" ","")'''
+        "sv=sv[:sv.find(" ")]+sv[sv.find(" ")+1:]"
+        try:
+            img = Image.open(sv)
+            numpydata = asarray(img)
+        except:
+            img = Image.open("corgi.jpg")
+            numpydata = asarray(img)
 
         cm = 1 / 1  # масштабирование относительно разрешения 128
         razr = 4 / 3  # формат
@@ -37,14 +52,18 @@ for kk in range(2):
 
         a = numpy.zeros((ci, cj, 3))
         b = numpy.zeros((ci, cj))
-        f.write(sv[0])
+        f.write(str(kk))
         f.write("\n")
         for i in range(ci):
             for j in range(cj):
                 s = ""
-                for k in range(3):
-                    a[i][j][k] = numpydata[int(i * ii) + int(di / 2)][int(j * jj) + int(dj / 2)][k] // ck * ck
-                    s += str(((int(a[i][j][k]) // ck)))
+                try:
+                    for k in range(3):
+                        a[i][j][k] = numpydata[int(i * ii) + int(di / 2)][int(j * jj) + int(dj / 2)][k] // ck * ck
+                        s += str(((int(a[i][j][k]) // ck)))
+                except:
+                    a[i][j][0] = numpydata[int(i * ii) + int(di / 2)][int(j * jj) + int(dj / 2)] // ck * ck
+                    s += str(((int(a[i][j][0]) // ck)))
                 b[i][j] = int(s, numofcolors + 1)
                 f.write(str(int(s, numofcolors + 1)))
                 f.write(" ")
